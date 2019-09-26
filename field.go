@@ -31,6 +31,11 @@ func (f *Field) Value() interface{} {
 	return f.value.Interface()
 }
 
+// Value returns the original value of reflect
+func (f *Field) RawValue() reflect.Value {
+	return f.value
+}
+
 // IsEmbedded returns true if the given field is an anonymous field (embedded)
 func (f *Field) IsEmbedded() bool {
 	return f.field.Anonymous

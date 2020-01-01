@@ -9,7 +9,7 @@ functions or improve the existing code.
 ## Install
 
 ```bash
-go get gopkg.in/gearintellix/structs
+go get gopkg.in/gearintellix/structs.v1
 ```
 
 ## Usage and Examples

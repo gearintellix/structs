@@ -16,6 +16,7 @@ var (
 type Field struct {
 	value      reflect.Value
 	field      reflect.StructField
+	parent     *Struct
 	defaultTag string
 }
 
@@ -29,6 +30,11 @@ func (f *Field) Tag(key string) string {
 // is not exported.
 func (f *Field) Value() interface{} {
 	return f.value.Interface()
+}
+
+// Parent returns the field's struct
+func (f *Field) Parent() *Struct {
+	return f.parent
 }
 
 // Value returns the original value of reflect
@@ -105,7 +111,7 @@ func (f *Field) Zero() error {
 //
 // It panics if field is not exported or if field's kind is not struct
 func (f *Field) Fields() []*Field {
-	return getFields(f.value, f.defaultTag)
+	return getFields(New(f.value.Interface()), f.defaultTag)
 }
 
 // Field returns the field from a nested struct. It panics if the nested struct

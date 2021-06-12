@@ -220,7 +220,7 @@ func (s *Struct) Values() []interface{} {
 //
 // It panics if s's kind is not struct.
 func (s *Struct) Fields() []*Field {
-	return getFields(s.value, s.TagName)
+	return getFields(s, s.TagName)
 }
 
 // Names returns a slice of field names. A struct tag with the content of "-"
@@ -231,7 +231,7 @@ func (s *Struct) Fields() []*Field {
 //
 // It panics if s's kind is not struct.
 func (s *Struct) Names() []string {
-	fields := getFields(s.value, s.TagName)
+	fields := getFields(s, s.TagName)
 
 	names := make([]string, len(fields))
 
@@ -242,7 +242,8 @@ func (s *Struct) Names() []string {
 	return names
 }
 
-func getFields(v reflect.Value, tagName string) []*Field {
+func getFields(s *Struct, tagName string) []*Field {
+	v := s.value
 	if v.Kind() == reflect.Ptr {
 		v = v.Elem()
 	}
@@ -259,8 +260,9 @@ func getFields(v reflect.Value, tagName string) []*Field {
 		}
 
 		f := &Field{
-			field: field,
-			value: v.FieldByName(field.Name),
+			field:  field,
+			value:  v.FieldByName(field.Name),
+			parent: s,
 		}
 
 		fields = append(fields, f)
